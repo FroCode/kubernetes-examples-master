@@ -1,0 +1,19 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster
+  region: eu-central-1
+
+vpc:
+  id: vpc-092e9f10eb56b4159 # Replace with the ID of your custom VPC
+  subnets:
+    private:
+      eu-central-1a: {subnet-0e4bbd139456fac9b}
+      eu-central-1b: {subnet-0fa5975e1ad46f046}
+
+nodeGroups:
+  - name: eks-node-group
+    instanceType: t3.medium
+    desiredCapacity: 2
+    privateNetworking: true # This makes sure your nodes only have private IP addresses

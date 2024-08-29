@@ -1,0 +1,26 @@
+eksctl create cluster --name  demoeks --version 1.5 --nodegroup-name demoeks-nodes --node-type m5.large --nodes 1 --managed
+ eksctl create cluster --name my-cluster --version 1.25 --managed --asg-access
+eksctl delete cluster --region=eu-central-1 --name=my-cluster
+
+aws iam create-policy --policy-name ALBIngressControllerIAMPolicy --policy-document file://iam-policy.json
+{
+    "Policy": {
+        "PolicyName": "ALBIngressControllerIAMPolicy",
+        "PolicyId": "ANPAUCSQQOVVGGPECUKA5",
+        "Arn": "arn:aws:iam::280415466858:policy/ALBIngressControllerIAMPolicy",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2023-09-23T23:06:17+00:00",
+        "UpdateDate": "2023-09-23T23:06:17+00:00"
+    }
+}
+
+
+eksctl create iamserviceaccount --cluster=attractive-gopher --namespace=kube-system --name=alb-ingress-controller --attach-policy-arn="arn:aws:iam::280415466858:policy/ALBIngressControllerIAMPolicy" --override-existing-serviceaccounts --approve
+curl -sS "https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml" | sed "s/# - --cluster-name=devCluster/- --cluster-name=attractive-gopher/g" | kubectl apply -f -
+# debut load balancer 
+
+kubectl logs -f -n kube-system -l app.kubernetes.io/instance=aws-load-balancer-controller
