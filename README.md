@@ -20,7 +20,7 @@
 7. Install load balancer controller using helm.
 8. Apply the ingress.yaml kubectl config.
 
-## Some helpful commands
+## Some helpful commands:
 
 1. To set kube config context
 
